@@ -1,0 +1,158 @@
+<html>
+<head>
+  <title>Firebase Login</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<style>
+
+body{
+  background-image :url('wall.jpg');
+
+
+  background-size:1560px 800px;
+  }
+  h1 {
+             text-shadow: 0 0 3px #000000, 0 0 5px #000000;
+         } }
+
+
+
+</style>
+<body>
+
+  <div style="  background:#FFFFFF30 "id="login_div" class="main-div">
+    <h1 align="center" ><font color="#FFFFFF" >BOOKAHOLIC</font></h1>
+
+    <input type="email" placeholder="Email..." id="email_field" />
+    <input type="password" placeholder="Password..." id="password_field" />
+
+    <button onclick="login()">Login to my account</button>
+      <button  style="margin:100px 0px 30px" onclick="signup()">Signup to Account</button>
+  </div>
+
+
+  <div  style="  background:#FFFFFF30 "id="signup_div" class="main-div">
+    <h1 align="center" ><font color="#FFFFFF">Signing Up</font></h1>
+    <input type="email" placeholder="Email..." id="email_field1" />
+    <input type="password" placeholder="Password..." id="password_field1" />
+
+
+    <button onclick="signup1()">Create new account</button>
+
+    <button style="margin:100px 0px 30px" onclick="login1()">Login into exixting acount</button>
+  </div>
+
+
+  <div  style="  background:#FFFFFF30" id="user_div" class="loggedin-div">
+    <h3>Welcome User</h3>
+    <p id="user_para">Welcome to Firebase web login Example. You're currently logged in.</p>
+    <button onclick="logout()">Logout</button>
+    <form action="search.html" >
+       <button style="margin:100px 0px 30px" type="submit">Go to search</button>
+    </form>
+  </div>
+
+
+  <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+
+<script>
+// Your web app's Firebase configuration
+var firebaseConfig = {
+  apiKey: "AIzaSyCb-X1ihsVuuAJni_hBfSbu42zkDrFy6jw",
+  authDomain: "notokei.firebaseapp.com",
+  databaseURL: "https://notokei.firebaseio.com",
+  projectId: "notokei",
+  storageBucket: "notokei.appspot.com",
+  messagingSenderId: "136105715404",
+  appId: "1:136105715404:web:82d692d8e9acdd4be54469",
+  measurementId: "G-XCTXBQ5QXR"
+};
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+</script>
+  <script >
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in.
+
+      document.getElementById("user_div").style.display = "block";
+      document.getElementById("login_div").style.display = "none";
+        document.getElementById("signup_div").style.display = "none";
+      var user = firebase.auth().currentUser;
+
+      if(user != null){
+
+        var email_id = user.email;
+          document.getElementById("signup_div").style.display = "none";
+       document.getElementById("user_para").innerHTML = "Welcome User : " + email_id;
+
+      }
+
+    } else {
+      // No user is signed in.
+
+      document.getElementById("user_div").style.display = "none";
+      document.getElementById("login_div").style.display = "block";
+
+    }
+  });
+  function login1(){
+  //document.getElementById("user_div").style.display = "none";
+    document.getElementById("login_div").style.display = "block";
+        document.getElementById("signup_div").style.display = "none";
+        document.getElementById("user_div").style.display = "none";
+  }
+  function signup(){
+    document.getElementById("user_div").style.display = "none";
+    document.getElementById("login_div").style.display = "none";
+      document.getElementById("signup_div").style.display = "block";
+  }
+
+function signup1(){
+
+      var u1 = document.getElementById("email_field1").value;
+
+    var p1 = document.getElementById("password_field1").value;
+  firebase.auth().createUserWithEmailAndPassword(u1, p1).catch(function(error) {
+    logout();
+    document.getElementById("login_div").style.display = "block";
+    document.getElementById("user_para").style.display = "none";
+        document.getElementById("signup_div").style.display = "none";
+        document.getElementById("user_div").style.display = "none";
+        firebase.auth().signOut();
+
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  window.alert("Error :"+ errorMessage);
+  // ...
+});
+}
+  function login(){
+
+    var userEmail = document.getElementById("email_field").value;
+    var userPass = document.getElementById("password_field").value;
+
+    firebase.auth().signInWithEmailAndPassword(userEmail,userPass).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+
+      window.alert("Error: "  +errorMessage);
+
+      // ...
+    });
+
+  }
+
+  function logout(){
+    firebase.auth().signOut();
+  }
+
+  </script>
+
+</body>
+</html>
